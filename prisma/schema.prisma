@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Tipo_usuario {
+  PACIENTE
+  PROFISSIONAL
+}
+
+enum Status_atendimento {
+  AGENDADA
+  CONCLUIDA
+}
+
+model Grupo_apoio {
+  id Int @id @default(autoincrement())
+  nome String
+  descricao String
+  local String
+  horario DateTime
+}
+
+model Depoimento {
+  id Int @id @default(autoincrement())
+  texto String
+  data_postagem DateTime @default(now())
+  pacienteId Int
+  paciente Paciente @relation(fields: [pacienteId], references: [id])
+}
+
+model Usuario {
+  id Int @id @default(autoincrement())
+  nome String
+  email String @unique
+  senha String
+  tipo Tipo_usuario
+  paciente Paciente?
+  profissional Profissional?
+}
+
+model Paciente {
+  id Int @id @default(autoincrement())
+  usuarioId Int @unique
+  telefone String?
+  data_nascimento DateTime
+  genero String
+  Endereco String
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  depoimentos Depoimento[]
+  anamnese Anamnese?
+  sessaoAtendimento Sessao_atendimentos[]
+}
+
+model Profissional {
+  id Int @id @default(autoincrement())
+  usuarioId Int @unique
+  especialidade String
+  localizacao String
+  faixa_etaria String
+  atendimentos_gratuitos Boolean
+  foto_perfil String
+  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  sessaoAtendimento Sessao_atendimentos[]
+}
+
+model Anamnese {
+  id Int @id @default(autoincrement())
+  pacienteId Int @unique
+  queixas String
+  historico_familiar String
+  uso_medicamentos String
+  objetivo_terapia String
+  paciente Paciente @relation(fields: [pacienteId], references: [id])
+}
+
+model Sessao_atendimentos {
+  id Int @id @default(autoincrement())
+  pacienteId Int
+  profissionalId Int
+  data DateTime
+  status Status_atendimento
+  Avaliacao String
+  paciente Paciente @relation(fields: [pacienteId], references: [id])
+  profissional Profissional @relation(fields: [profissionalId], references: [id])
+}
+
