@@ -21,6 +21,7 @@ enum Tipo_usuario {
 enum Status_atendimento {
   AGENDADA
   CONCLUIDA
+  CANCELADA
 }
 
 model Grupo_apoio {
@@ -56,6 +57,10 @@ model Paciente {
   data_nascimento DateTime
   genero String
   Endereco String
+  queixas String
+  historico_familiar String
+  uso_medicamentos String
+  objetivo_terapia String
   usuario Usuario @relation(fields: [usuarioId], references: [id])
   depoimentos Depoimento[]
   anamnese Anamnese?
@@ -72,16 +77,18 @@ model Profissional {
   foto_perfil String
   usuario Usuario @relation(fields: [usuarioId], references: [id])
   sessaoAtendimento Sessao_atendimentos[]
+  anamneses Anamnese[]
 }
 
 model Anamnese {
   id Int @id @default(autoincrement())
   pacienteId Int @unique
-  queixas String
-  historico_familiar String
-  uso_medicamentos String
-  objetivo_terapia String
+  profissionalId Int
+  data_anamnese DateTime
+  relato_atendimento String
+  ajustes_no_tratamento String
   paciente Paciente @relation(fields: [pacienteId], references: [id])
+  profissional Profissional @relation(fields: [profissionalId], references: [id])
 }
 
 model Sessao_atendimentos {
