@@ -2,7 +2,7 @@
 CREATE TYPE "Tipo_usuario" AS ENUM ('PACIENTE', 'PROFISSIONAL');
 
 -- CreateEnum
-CREATE TYPE "Status_atendimento" AS ENUM ('AGENDADA', 'CONCLUIDA');
+CREATE TYPE "Status_atendimento" AS ENUM ('AGENDADA', 'CONCLUIDA', 'CANCELADA');
 
 -- CreateTable
 CREATE TABLE "Grupo_apoio" (
@@ -44,6 +44,10 @@ CREATE TABLE "Paciente" (
     "data_nascimento" TIMESTAMP(3) NOT NULL,
     "genero" TEXT NOT NULL,
     "Endereco" TEXT NOT NULL,
+    "queixas" TEXT NOT NULL,
+    "historico_familiar" TEXT NOT NULL,
+    "uso_medicamentos" TEXT NOT NULL,
+    "objetivo_terapia" TEXT NOT NULL,
 
     CONSTRAINT "Paciente_pkey" PRIMARY KEY ("id")
 );
@@ -65,10 +69,10 @@ CREATE TABLE "Profissional" (
 CREATE TABLE "Anamnese" (
     "id" SERIAL NOT NULL,
     "pacienteId" INTEGER NOT NULL,
-    "queixas" TEXT NOT NULL,
-    "historico_familiar" TEXT NOT NULL,
-    "uso_medicamentos" TEXT NOT NULL,
-    "objetivo_terapia" TEXT NOT NULL,
+    "profissionalId" INTEGER NOT NULL,
+    "data_anamnese" TIMESTAMP(3) NOT NULL,
+    "relato_atendimento" TEXT NOT NULL,
+    "ajustes_no_tratamento" TEXT NOT NULL,
 
     CONSTRAINT "Anamnese_pkey" PRIMARY KEY ("id")
 );
@@ -108,6 +112,9 @@ ALTER TABLE "Profissional" ADD CONSTRAINT "Profissional_usuarioId_fkey" FOREIGN 
 
 -- AddForeignKey
 ALTER TABLE "Anamnese" ADD CONSTRAINT "Anamnese_pacienteId_fkey" FOREIGN KEY ("pacienteId") REFERENCES "Paciente"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Anamnese" ADD CONSTRAINT "Anamnese_profissionalId_fkey" FOREIGN KEY ("profissionalId") REFERENCES "Profissional"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Sessao_atendimentos" ADD CONSTRAINT "Sessao_atendimentos_pacienteId_fkey" FOREIGN KEY ("pacienteId") REFERENCES "Paciente"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

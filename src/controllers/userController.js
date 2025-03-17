@@ -24,6 +24,18 @@ exports.buscarUsuarioPorId = async (req, res) => {
     }
 };
 
+exports.buscarUsuarioPorEmail = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const usuario = await Usuario;
+        res.json(usuario);
+    }
+    catch (error) {
+        console.error('ERRO AO BUSCAR USUÁRIO:', error);
+        res.status(404).json({ error: error.message || "Usuário não encontrado" });
+    }
+};
+
 exports.criarUsuario = async (req, res) => {
     try {
         const { nome, email, senha, tipo } = req.body;
@@ -34,6 +46,11 @@ exports.criarUsuario = async (req, res) => {
 
         if (tipo !== 'PACIENTE' && tipo !== 'PROFISSIONAL') {
             return res.status(400).json({ error: "Tipo de usuário inválido" });
+        }
+
+        const usuarioExistente = await Usuario.buscarUsuarioPorEmail(email);
+        if (usuarioExistente) {
+            return res.status(400).json({ error: "Email já cadastrado" });
         }
 
         const novoUsuario = await Usuario.criarUsuario({
