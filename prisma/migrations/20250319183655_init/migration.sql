@@ -28,7 +28,7 @@ CREATE TABLE "Depoimento" (
 -- CreateTable
 CREATE TABLE "Usuario" (
     "id" SERIAL NOT NULL,
-    "nome" TEXT NOT NULL,
+    "nome_usuario" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "senha" TEXT NOT NULL,
     "tipo" "Tipo_usuario" NOT NULL,
@@ -40,10 +40,11 @@ CREATE TABLE "Usuario" (
 CREATE TABLE "Paciente" (
     "id" SERIAL NOT NULL,
     "usuarioId" INTEGER NOT NULL,
-    "telefone" TEXT,
+    "nome_paciente" TEXT NOT NULL,
     "data_nascimento" TIMESTAMP(3) NOT NULL,
     "genero" TEXT NOT NULL,
     "Endereco" TEXT NOT NULL,
+    "telefone" TEXT,
     "queixas" TEXT NOT NULL,
     "historico_familiar" TEXT NOT NULL,
     "uso_medicamentos" TEXT NOT NULL,
@@ -56,6 +57,8 @@ CREATE TABLE "Paciente" (
 CREATE TABLE "Profissional" (
     "id" SERIAL NOT NULL,
     "usuarioId" INTEGER NOT NULL,
+    "nome_profissional" TEXT NOT NULL,
+    "crm" TEXT NOT NULL,
     "especialidade" TEXT NOT NULL,
     "localizacao" TEXT NOT NULL,
     "faixa_etaria" TEXT NOT NULL,
@@ -99,7 +102,13 @@ CREATE UNIQUE INDEX "Paciente_usuarioId_key" ON "Paciente"("usuarioId");
 CREATE UNIQUE INDEX "Profissional_usuarioId_key" ON "Profissional"("usuarioId");
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Profissional_crm_key" ON "Profissional"("crm");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Anamnese_pacienteId_key" ON "Anamnese"("pacienteId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Anamnese_profissionalId_key" ON "Anamnese"("profissionalId");
 
 -- AddForeignKey
 ALTER TABLE "Depoimento" ADD CONSTRAINT "Depoimento_pacienteId_fkey" FOREIGN KEY ("pacienteId") REFERENCES "Paciente"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

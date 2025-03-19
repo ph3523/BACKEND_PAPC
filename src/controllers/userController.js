@@ -38,9 +38,9 @@ exports.buscarUsuarioPorEmail = async (req, res) => {
 
 exports.criarUsuario = async (req, res) => {
     try {
-        const { nome, email, senha, tipo } = req.body;
+        const { nome_usuario, email, senha, tipo } = req.body;
 
-        if (!nome || !email || !senha || !tipo) {
+        if (!nome_usuario || !email || !senha || !tipo) {
             return res.status(400).json({ error: "Nome, email, senha e tipo são obrigatórios" });
         }
 
@@ -54,7 +54,7 @@ exports.criarUsuario = async (req, res) => {
         }
 
         const novoUsuario = await Usuario.criarUsuario({
-            nome,
+            nome_usuario,
             email,
             senha,
             tipo
@@ -70,14 +70,14 @@ exports.criarUsuario = async (req, res) => {
 exports.atualizarUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nome, email, senha, tipo } = req.body;
+        const { nome_usuario, email, senha, tipo } = req.body;
 
-        if (!nome || !email || !senha || !tipo) {
+        if (!nome_usuario || !email || !senha || !tipo) {
             return res.status(400).json({ error: "Nome, email, senha e tipo são obrigatórios" });
         }
 
         const usuarioAtualizado = await Usuario.atualizarUsuario(Number(id), {
-            nome,
+            nome_usuario,
             email,
             senha,
             tipo

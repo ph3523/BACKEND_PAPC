@@ -24,10 +24,10 @@ const buscarUsuarioPorEmail = async (email) => {
 };
 
 
-const criarUsuario = async ({nome, email, senha, tipo}) => {
+const criarUsuario = async ({nome_usuario, email, senha, tipo}) => {
     return await prisma.usuario.create({
         data: {
-            nome,
+            nome_usuario,
             email,
             senha,
             tipo
@@ -35,7 +35,7 @@ const criarUsuario = async ({nome, email, senha, tipo}) => {
     });
 };
 
-const atualizarUsuario = async (id, {nome, email, senha, tipo}) => {
+const atualizarUsuario = async (id, {nome_usuario, email, senha, tipo}) => {
     const usuario = await prisma.usuario.findUnique({
         where: {id},
     });
@@ -47,7 +47,7 @@ const atualizarUsuario = async (id, {nome, email, senha, tipo}) => {
     return await prisma.usuario.update({
         where: {id},
         data: {
-            nome,
+            nome_usuario,
             email,
             senha,
             tipo
