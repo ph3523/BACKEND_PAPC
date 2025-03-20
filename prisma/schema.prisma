@@ -42,21 +42,22 @@ model Depoimento {
 
 model Usuario {
   id Int @id @default(autoincrement())
-  nome String
+  nome_usuario String
   email String @unique
   senha String
   tipo Tipo_usuario
-  paciente Paciente?
-  profissional Profissional?
+  paciente Paciente? @relation
+  profissional Profissional? @relation
 }
 
 model Paciente {
   id Int @id @default(autoincrement())
   usuarioId Int @unique
-  telefone String?
+  nome_paciente String
   data_nascimento DateTime
   genero String
-  Endereco String
+  endereco String
+  telefone String?
   queixas String
   historico_familiar String
   uso_medicamentos String
@@ -70,6 +71,8 @@ model Paciente {
 model Profissional {
   id Int @id @default(autoincrement())
   usuarioId Int @unique
+  nome_profissional String
+  crm String @unique
   especialidade String
   localizacao String
   faixa_etaria String
@@ -83,7 +86,7 @@ model Profissional {
 model Anamnese {
   id Int @id @default(autoincrement())
   pacienteId Int @unique
-  profissionalId Int
+  profissionalId Int @unique
   data_anamnese DateTime
   relato_atendimento String
   ajustes_no_tratamento String

@@ -24,11 +24,23 @@ exports.buscarUsuarioPorId = async (req, res) => {
     }
 };
 
+exports.buscarUsuarioPorEmail = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const usuario = await Usuario.buscarUsuarioPorEmail(email);
+        res.json(usuario);
+    }
+    catch (error) {
+        console.error('ERRO AO BUSCAR USUÁRIO:', error);
+        res.status(404).json({ error: error.message || "Usuário não encontrado" });
+    }
+};
+
 exports.criarUsuario = async (req, res) => {
     try {
-        const { nome, email, senha, tipo } = req.body;
+        const { nome_usuario, email, senha, tipo } = req.body;
 
-        if (!nome || !email || !senha || !tipo) {
+        if (!nome_usuario || !email || !senha || !tipo) {
             return res.status(400).json({ error: "Nome, email, senha e tipo são obrigatórios" });
         }
 
@@ -36,8 +48,13 @@ exports.criarUsuario = async (req, res) => {
             return res.status(400).json({ error: "Tipo de usuário inválido" });
         }
 
+        const usuarioExistente = await Usuario.buscarUsuarioPorEmail(email);
+        if (usuarioExistente) {
+            return res.status(400).json({ error: "Email já cadastrado" });
+        }
+
         const novoUsuario = await Usuario.criarUsuario({
-            nome,
+            nome_usuario,
             email,
             senha,
             tipo
@@ -53,14 +70,14 @@ exports.criarUsuario = async (req, res) => {
 exports.atualizarUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nome, email, senha, tipo } = req.body;
+        const { nome_usuario, email, senha, tipo } = req.body;
 
-        if (!nome || !email || !senha || !tipo) {
+        if (!nome_usuario || !email || !senha || !tipo) {
             return res.status(400).json({ error: "Nome, email, senha e tipo são obrigatórios" });
         }
 
         const usuarioAtualizado = await Usuario.atualizarUsuario(Number(id), {
-            nome,
+            nome_usuario,
             email,
             senha,
             tipo
@@ -78,7 +95,7 @@ exports.excluirUsuario = async (req, res) => {
     try {
         const { id } = req.params;
         await Usuario.excluirUsuario(Number(id));
-        res.status(204).send();
+        res.status(204).json({ message: "Usuario excluído com sucesso" });
     } catch (error) {
         console.error('ERRO AO EXCLUIR USUÁRIO:', error);
         res.status(500).json({ error: error.message || "Erro ao excluir usuário" });

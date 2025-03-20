@@ -1,4 +1,4 @@
-const { prisma, Tipo_usuario } = require('../prisma');
+const prisma = require('../prisma');
 
 
 const listarUsuario = async () => {
@@ -16,18 +16,26 @@ const buscarUsuarioPorId = async (id) => {
     return usuario;
 };
 
-const criarUsuario = async ({nome, email, senha, tipo}) => {
+const buscarUsuarioPorEmail = async (email) => {
+    const usuario = await prisma.usuario.findUnique({
+        where: {email}
+    });
+    return usuario;
+};
+
+
+const criarUsuario = async ({nome_usuario, email, senha, tipo}) => {
     return await prisma.usuario.create({
         data: {
-            nome,
+            nome_usuario,
             email,
             senha,
-            tipo
+            tipo,
         },
     });
 };
 
-const atualizarUsuario = async (id, {nome, email, senha, tipo}) => {
+const atualizarUsuario = async (id, {nome_usuario, email, senha, tipo}) => {
     const usuario = await prisma.usuario.findUnique({
         where: {id},
     });
@@ -39,7 +47,7 @@ const atualizarUsuario = async (id, {nome, email, senha, tipo}) => {
     return await prisma.usuario.update({
         where: {id},
         data: {
-            nome,
+            nome_usuario,
             email,
             senha,
             tipo
@@ -64,6 +72,7 @@ const excluirUsuario = async (id) => {
 module.exports = {
     listarUsuario,
     buscarUsuarioPorId,
+    buscarUsuarioPorEmail,
     criarUsuario,
     atualizarUsuario,
     excluirUsuario,
