@@ -30,7 +30,7 @@ const criarUsuario = async ({nome_usuario, email, senha, tipo}) => {
             nome_usuario,
             email,
             senha,
-            tipo
+            tipo,
         },
     });
 };

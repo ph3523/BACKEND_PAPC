@@ -56,7 +56,7 @@ model Paciente {
   nome_paciente String
   data_nascimento DateTime
   genero String
-  Endereco String
+  endereco String
   telefone String?
   queixas String
   historico_familiar String

@@ -27,7 +27,7 @@ exports.buscarUsuarioPorId = async (req, res) => {
 exports.buscarUsuarioPorEmail = async (req, res) => {
     try {
         const { email } = req.params;
-        const usuario = await Usuario;
+        const usuario = await Usuario.buscarUsuarioPorEmail(email);
         res.json(usuario);
     }
     catch (error) {
@@ -95,7 +95,7 @@ exports.excluirUsuario = async (req, res) => {
     try {
         const { id } = req.params;
         await Usuario.excluirUsuario(Number(id));
-        res.status(204).send();
+        res.status(204).json({ message: "Usuario excluído com sucesso" });
     } catch (error) {
         console.error('ERRO AO EXCLUIR USUÁRIO:', error);
         res.status(500).json({ error: error.message || "Erro ao excluir usuário" });
