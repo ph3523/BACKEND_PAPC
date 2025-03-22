@@ -77,7 +77,7 @@ model Profissional {
   localizacao String
   faixa_etaria String
   atendimentos_gratuitos Boolean
-  foto_perfil String
+  foto_perfil String?
   usuario Usuario @relation(fields: [usuarioId], references: [id])
   sessaoAtendimento Sessao_atendimentos[]
   anamneses Anamnese[]
