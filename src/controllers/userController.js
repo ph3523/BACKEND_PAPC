@@ -83,7 +83,7 @@ exports.atualizarUsuario = async (req, res) => {
             tipo
         });
 
-        res.json(usuarioAtualizado);
+        res.status(201).json(usuarioAtualizado);
     }
     catch (error) {
         console.error('ERRO AO ATUALIZAR USUÁRIO:', error);
