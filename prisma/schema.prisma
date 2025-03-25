@@ -30,6 +30,10 @@ model Grupo_apoio {
   descricao String
   local String
   horario String
+  publico_alvo String
+  tipo_atendimento String
+  gratuito Boolean
+  valor String
 }
 
 model Depoimento {
