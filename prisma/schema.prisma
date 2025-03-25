@@ -29,7 +29,7 @@ model Grupo_apoio {
   nome String
   descricao String
   local String
-  horario DateTime
+  horario String
 }
 
 model Depoimento {
@@ -62,7 +62,7 @@ model Paciente {
   historico_familiar String
   uso_medicamentos String
   objetivo_terapia String
-  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   depoimentos Depoimento[]
   anamnese Anamnese?
   sessaoAtendimento Sessao_atendimentos[]
@@ -77,8 +77,8 @@ model Profissional {
   localizacao String
   faixa_etaria String
   atendimentos_gratuitos Boolean
-  foto_perfil String
-  usuario Usuario @relation(fields: [usuarioId], references: [id])
+  foto_perfil String?
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
   sessaoAtendimento Sessao_atendimentos[]
   anamneses Anamnese[]
 }

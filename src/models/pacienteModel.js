@@ -29,7 +29,14 @@ const criarPaciente = async ({usuarioId, nome_paciente,data_nascimento, genero, 
         throw new Error('Usuário não é um paciente');
     }
 
+    // verifica se já existe um paciente com o usuarioId
+    const pacienteExistente = await prisma.paciente.findUnique({
+        where: {usuarioId}
+    });
 
+    if (pacienteExistente) {
+        throw new Error('Paciente já cadastrado');
+    }
 
     return await prisma.paciente.create({
         data: {
