@@ -82,7 +82,10 @@ exports.excluirPaciente = async (req, res) => {
     try {
         const { id } = req.params;
         await Paciente.excluirPaciente(Number(id));
-        res.status(204).json({ message: "Paciente excluído com sucesso" });
+        res.status(200).json({ 
+            message: `Paciente ${id} excluído com sucesso`,
+            success: true
+        });
     }
     catch (error) {
         console.error('ERRO AO EXCLUIR PACIENTE:', error);

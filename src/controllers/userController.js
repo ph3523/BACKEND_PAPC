@@ -72,10 +72,6 @@ exports.atualizarUsuario = async (req, res) => {
         const { id } = req.params;
         const { nome_usuario, email, senha, tipo } = req.body;
 
-        if (!nome_usuario || !email || !senha || !tipo) {
-            return res.status(400).json({ error: "Nome, email, senha e tipo são obrigatórios" });
-        }
-
         const usuarioAtualizado = await Usuario.atualizarUsuario(Number(id), {
             nome_usuario,
             email,
@@ -95,7 +91,10 @@ exports.excluirUsuario = async (req, res) => {
     try {
         const { id } = req.params;
         await Usuario.excluirUsuario(Number(id));
-        res.status(204).json({ message: "Usuario excluído com sucesso" });
+        res.status(200).json({ 
+            message: `Usuário ${id} excluído com sucesso`,
+            success: true
+        });
     } catch (error) {
         console.error('ERRO AO EXCLUIR USUÁRIO:', error);
         res.status(500).json({ error: error.message || "Erro ao excluir usuário" });
