@@ -28,7 +28,8 @@ exports.criarGrupoApoio = async (req, res) => {
     try {
         const { nome, descricao, local, horario } = req.body;
 
-        if (!nome || !descricao || !local || !horario) {
+        if (!nome || !descricao || !local || !horario || !data.publico_alvo 
+            || !data.tipo_atendimento || !data.gratuito || !data.valor) {
             return res.status(400).json({ error: "Nome, descrição, local e horário são obrigatórios" });
         }
 
@@ -36,7 +37,11 @@ exports.criarGrupoApoio = async (req, res) => {
             nome,
             descricao,
             local,
-            horario
+            horario,
+            publico_alvo,
+            tipo_atendimento,
+            gratuito,
+            valor
         });
 
         res.status(201).json(novoGrupo);
@@ -56,7 +61,11 @@ exports.atualizarGrupoApoio = async (req, res) => {
             nome,
             descricao,
             local,
-            horario
+            horario,
+            publico_alvo,
+            tipo_atendimento,
+            gratuito,
+            valor
         });
 
         res.status(201).json(grupoAtualizado);
