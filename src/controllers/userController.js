@@ -56,6 +56,7 @@ exports.criarUsuario = async (req, res) => {
         nome_paciente: paciente.nome_paciente,
         data_nascimento: new Date(paciente.data_nascimento),
         endereco: paciente.endereco,
+        genero: paciente.genero,
         telefone: paciente.telefone || null,
         queixas: paciente.queixas,
         historico_familiar: paciente.historico_familiar,
