@@ -37,6 +37,16 @@ const criarProfissional = async ({usuarioId, nome_profissional, crm, especialida
     if (profissionalExistente) {
         throw new Error('Profissional já cadastrado');
     }
+    
+    // verificar se um crm já está cadastrado
+    const crmExistente = await prisma.profissional.findUnique({
+        where: {crm}
+    });
+
+    if (crmExistente) {
+        throw new Error('CRM já cadastrado');
+    }
+
     return await prisma.profissional.create({
         data: {
             usuarioId,

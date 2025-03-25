@@ -29,7 +29,7 @@ model Grupo_apoio {
   nome String
   descricao String
   local String
-  horario DateTime
+  horario String
 }
 
 model Depoimento {
