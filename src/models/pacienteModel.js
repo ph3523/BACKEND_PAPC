@@ -24,12 +24,12 @@ const criarPaciente = async (data) => {
     // verificação se o usuario existe
     const usuario = await buscarUsuarioPorId(data.usuarioId);
 
-    // verificação se o usuario é um paciente
+    //  se o usuario é um paciente
     if (usuario.tipo !== 'PACIENTE') {
         throw new Error('Usuário não é um paciente');
     }
 
-    // verifica se já existe um paciente com o usuarioId
+    // se já existe um paciente com o usuarioId
     const pacienteExistente = await prisma.paciente.findUnique({
         where: { usuarioId: data.usuarioId }
     });
