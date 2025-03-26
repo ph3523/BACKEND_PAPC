@@ -1,4 +1,5 @@
 const prisma = require('../prisma');
+const bcrypt = require('bcryptjs');
 
 
 const listarUsuario = async () => {
@@ -24,18 +25,19 @@ const buscarUsuarioPorEmail = async (email) => {
 };
 
 
-const criarUsuario = async ({nome_usuario, email, senha, tipo}) => {
+const criarUsuario = async (data) => {
+    const hashedPassword = await bcrypt.hash(data.senha, 10);
     return await prisma.usuario.create({
         data: {
-            nome_usuario,
-            email,
-            senha,
-            tipo,
+            nome_usuario: data.nome_usuario,
+            email: data.email,
+            senha: hashedPassword,
+            tipo: data.tipo,
         },
     });
 };
 
-const atualizarUsuario = async (id, {nome_usuario, email, senha, tipo}) => {
+const atualizarUsuario = async (id, data) => {
     const usuario = await prisma.usuario.findUnique({
         where: {id},
     });
@@ -47,10 +49,10 @@ const atualizarUsuario = async (id, {nome_usuario, email, senha, tipo}) => {
     return await prisma.usuario.update({
         where: {id},
         data: {
-            nome_usuario,
-            email,
-            senha,
-            tipo
+            nome_usuario: data.nome_usuario,
+            email: data.email,
+            senha: data.senha,
+            tipo: data.tipo,
         },
     });
 };
