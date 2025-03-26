@@ -1,4 +1,5 @@
 const prisma = require('../prisma');
+const bcrypt = require('bcryptjs');
 
 
 const listarUsuario = async () => {
@@ -25,11 +26,12 @@ const buscarUsuarioPorEmail = async (email) => {
 
 
 const criarUsuario = async (data) => {
+    const hashedPassword = await bcrypt.hash(data.senha, 10);
     return await prisma.usuario.create({
         data: {
             nome_usuario: data.nome_usuario,
             email: data.email,
-            senha: data.senha,
+            senha: hashedPassword,
             tipo: data.tipo,
         },
     });

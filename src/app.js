@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors'); 
 
+const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const pacienteRoutes = require('./routes/pacientesRoutes');
 const profissionalRoutes = require('./routes/profissionalRoutes');
@@ -14,6 +15,7 @@ app.use(cors());
 // Permite JSON no body das requisições
 app.use(express.json());
 
+app.use('/auth', authRoutes);
 app.use('/usuarios', userRoutes);
 app.use('/pacientes', pacienteRoutes);
 app.use('/profissionais', profissionalRoutes);
