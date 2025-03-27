@@ -19,10 +19,10 @@ const buscarProfissionalPorId = async (id) => {
     return profissional;
 };
 
-const criarProfissional = async ({usuarioId, nome_profissional, crm, especialidade, localizacao, faixa_etaria, atendimentos_gratuitos, foto_perfil}) => {
+const criarProfissional = async (data) => {
     
     // verificação se o usuario existe
-    const usuario = await buscarUsuarioPorId(usuarioId);
+    const usuario = await buscarUsuarioPorId(data.usuarioId);
 
      // verificação se o usuario é um profissional
     if (usuario.tipo !== 'PROFISSIONAL') {
@@ -31,7 +31,7 @@ const criarProfissional = async ({usuarioId, nome_profissional, crm, especialida
 
     // verifica se já existe um profissional com o usuarioId
     const profissionalExistente = await prisma.profissional.findUnique({
-        where: {usuarioId}
+        where: {usuarioId: data.usuarioId}
     });
 
     if (profissionalExistente) {
@@ -40,7 +40,7 @@ const criarProfissional = async ({usuarioId, nome_profissional, crm, especialida
     
     // verificar se um crm já está cadastrado
     const crmExistente = await prisma.profissional.findUnique({
-        where: {crm}
+        where: {crm: data.crm}
     });
 
     if (crmExistente) {
@@ -49,20 +49,20 @@ const criarProfissional = async ({usuarioId, nome_profissional, crm, especialida
 
     return await prisma.profissional.create({
         data: {
-            usuarioId,
-            nome_profissional,
-            crm,
-            especialidade,
-            localizacao,
-            faixa_etaria,
-            atendimentos_gratuitos,
-            foto_perfil
+            usuarioId: data.usuarioId,
+            nome_profissional: data.nome_profissional,
+            crm: data.crm,
+            especialidade: data.especialidade,
+            localizacao: data.localizacao,
+            faixa_etaria: data.faixa_etaria,
+            atendimentos_gratuitos: data.atendimentos_gratuitos,
+            foto_perfil: data.foto_perfil,
         },
     });
 
 };
 
-const atualizarProfissional = async (id, { nome_profissional, crm, especialidade, localizacao, faixa_etaria, atendimentos_gratuitos, foto_perfil}) => {
+const atualizarProfissional = async (id, data) => {
     const profissional = await prisma.profissional.findUnique({
         where: {id},
     });
@@ -74,13 +74,14 @@ const atualizarProfissional = async (id, { nome_profissional, crm, especialidade
     return await prisma.profissional.update({
         where: {id},
         data: {
-            nome_profissional,
-            crm,
-            especialidade,
-            localizacao,
-            faixa_etaria,
-            atendimentos_gratuitos,
-            foto_perfil
+            usuarioId: data.usuarioId,
+            nome_profissional: data.nome_profissional,
+            crm: data.crm,
+            especialidade: data.especialidade,
+            localizacao: data.localizacao,
+            faixa_etaria: data.faixa_etaria,
+            atendimentos_gratuitos: data.atendimentos_gratuitos,
+            foto_perfil: data.foto_perfil,
         }
     });
 };

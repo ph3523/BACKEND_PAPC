@@ -17,9 +17,6 @@ const buscarGrupoApoioPorId = async (id) => {
 
 const criarGrupoApoio = async (data) => {
     
-    if (!data.nome || !data.descricao || !data.local || !data.horario ) {
-        throw new Error('Preencha todos os campos');
-    }
 
     return await prisma.grupo_apoio.create({
         data: {
@@ -27,6 +24,10 @@ const criarGrupoApoio = async (data) => {
             descricao: data.descricao,
             local: data.local,
             horario: data.horario,
+            publico_alvo: data.publico_alvo,
+            tipo_atendimento: data.tipo_atendimento,
+            gratuito: data.gratuito,
+            valor: data.valor,
         },
     });
 };
@@ -47,6 +48,10 @@ const atualizarGrupoApoio = async (id, data) => {
             descricao: data.descricao,
             local: data.local,
             horario: data.horario,
+            publico_alvo: data.publico_alvo,
+            tipo_atendimento: data.tipo_atendimento,
+            gratuito: data.gratuito,
+            valor: data.valor,
         },
     });
 };

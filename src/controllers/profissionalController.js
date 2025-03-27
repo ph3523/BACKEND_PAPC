@@ -75,7 +75,10 @@ exports.excluirProfissional = async (req, res) => {
     try {
         const { id } = req.params;
         await Profissional.excluirProfissional(Number(id));
-        res.status(204).send();
+        res.status(200).json({ 
+            message: `Profissional ${id} excluído com sucesso`,
+            success: true
+        });
     }
     catch (error) {
         console.error('ERRO AO EXCLUIR PROFISSIONAL:', error);

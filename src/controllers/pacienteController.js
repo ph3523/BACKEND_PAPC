@@ -106,12 +106,16 @@ exports.atualizarPaciente = async (req, res) => {
 };
 
 exports.excluirPaciente = async (req, res) => {
-  try {
-    const { id } = req.params;
-    await Paciente.excluirPaciente(Number(id));
-    res.status(204).json({ message: "Paciente excluído com sucesso" });
-  } catch (error) {
-    console.error('ERRO AO EXCLUIR PACIENTE:', error);
-    res.status(500).json({ error: error.message || "Erro ao excluir paciente" });
-  }
-};
+    try {
+        const { id } = req.params;
+        await Paciente.excluirPaciente(Number(id));
+        res.status(200).json({ 
+            message: `Paciente ${id} excluído com sucesso`,
+            success: true
+        });
+    }
+    catch (error) {
+        console.error('ERRO AO EXCLUIR PACIENTE:', error);
+        res.status(500).json({ error: error.message || "Erro ao excluir paciente" });
+    }
+}

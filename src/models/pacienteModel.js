@@ -9,7 +9,7 @@ const listarPaciente = async () => {
 
 const buscarPacientePorId = async (id) => {
     const paciente = await prisma.paciente.findUnique({
-        where: {id},
+        where: { id },
         include: { usuario: true }
     });
 
@@ -19,10 +19,10 @@ const buscarPacientePorId = async (id) => {
     return paciente;
 };
 
-const criarPaciente = async ({usuarioId, nome_paciente,data_nascimento, genero, endereco, telefone, queixas, historico_familiar, uso_medicamentos, objetivo_terapia}) => {
-    
-    //  se o usuario existe
-    const usuario = await buscarUsuarioPorId(usuarioId);
+const criarPaciente = async (data) => {
+
+    // verificação se o usuario existe
+    const usuario = await buscarUsuarioPorId(data.usuarioId);
 
     //  se o usuario é um paciente
     if (usuario.tipo !== 'PACIENTE') {
@@ -31,7 +31,7 @@ const criarPaciente = async ({usuarioId, nome_paciente,data_nascimento, genero, 
 
     // se já existe um paciente com o usuarioId
     const pacienteExistente = await prisma.paciente.findUnique({
-        where: {usuarioId}
+        where: { usuarioId: data.usuarioId }
     });
 
     if (pacienteExistente) {
@@ -40,23 +40,23 @@ const criarPaciente = async ({usuarioId, nome_paciente,data_nascimento, genero, 
 
     return await prisma.paciente.create({
         data: {
-            usuarioId,
-            nome_paciente,
-            data_nascimento: new Date (data_nascimento),
-            genero,
-            endereco,
-            telefone,
-            queixas,
-            historico_familiar,
-            uso_medicamentos,
-            objetivo_terapia
+            usuarioId: data.usuarioId,
+            nome_paciente: data.nome_paciente,
+            data_nascimento: data.data_nascimento,
+            genero: data.genero,
+            endereco: data.endereco,
+            telefone: data.telefone,
+            queixas: data.queixas,
+            historico_familiar: data.historico_familiar,
+            uso_medicamentos: data.uso_medicamentos,
+            objetivo_terapia: data.objetivo_terapia
         },
     });
 }
 
-const atualizarPaciente = async (id, { nome_paciente,data_nascimento, genero, endereco, telefone, queixas, historico_familiar, uso_medicamentos, objetivo_terapia}) => {
+const atualizarPaciente = async (id, data) => {
     const paciente = await prisma.paciente.findUnique({
-        where: {id},
+        where: { id },
     });
 
     if (!paciente) {
@@ -64,24 +64,25 @@ const atualizarPaciente = async (id, { nome_paciente,data_nascimento, genero, en
     }
 
     return await prisma.paciente.update({
-        where: {id},
+        where: { id },
         data: {
-            nome_paciente,
-            data_nascimento,
-            genero,
-            endereco,
-            telefone,
-            queixas,
-            historico_familiar,
-            uso_medicamentos,
-            objetivo_terapia
+            usuarioId: data.usuarioId,
+            nome_paciente: data.nome_paciente,
+            data_nascimento: data.data_nascimento,
+            genero: data.genero,
+            endereco: data.endereco,
+            telefone: data.telefone,
+            queixas: data.queixas,
+            historico_familiar: data.historico_familiar,
+            uso_medicamentos: data.uso_medicamentos,
+            objetivo_terapia: data.objetivo_terapia
         },
     });
 };
 
 const excluirPaciente = async (id) => {
     const paciente = await prisma.paciente.findUnique({
-        where: {id},
+        where: { id },
     });
 
     if (!paciente) {
@@ -89,7 +90,7 @@ const excluirPaciente = async (id) => {
     }
 
     return await prisma.paciente.delete({
-        where: {id},
+        where: { id },
     });
 }
 
