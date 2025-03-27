@@ -69,7 +69,15 @@ const login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        res.json({token});
+        res.json({
+            token,
+            usuario: {
+                id: usuario.id,
+                nome_usuario: usuario.nome_usuario,
+                email: usuario.email,
+                tipo: usuario.tipo
+            }
+        });
     }
     catch (error) {
         res.status(500).json({error: "Erro ao fazer login!"});
