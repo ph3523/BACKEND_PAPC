@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors'); 
+require("dotenv").config();
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -10,9 +11,9 @@ const grupoApoioRoutes = require('./routes/grupoApoioRoutes');
 
 const app = express();
 
-// Habilita CORS para permitir requisições do front-end
+//CORS para permitir requisições do front-end
 app.use(cors());
-// Permite JSON no body das requisições
+//Permite JSON no body das requisições
 app.use(express.json());
 
 app.use('/auth', authRoutes);
