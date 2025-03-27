@@ -1,4 +1,6 @@
 const userModel = require('../models/userModel');
+const Paciente = require('../models/pacienteModel');
+const Profissional = require('../models/profissionalModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -6,7 +8,7 @@ const register = async (req, res) => {
     console.log("Dados Recebidos: ", req.body);
 
     try {
-        const {nome_usuario, email, senha, tipo} = req.body;
+        const {nome_usuario, email, senha, tipo, paciente, profissional} = req.body;
 
         if (!nome_usuario || !email || !senha || !tipo) {
             return res.status(400).send({error: 'Faltam Campos a serem preenchidos!'});
@@ -17,19 +19,41 @@ const register = async (req, res) => {
             return res.status(400).send({error: 'Email já cadastrado!'});
         }
 
-        await userModel.criarUsuario({nome_usuario, email, senha, tipo});
-        res.status(201).json({message: 'Usuário cadastrado com sucesso!'});
+        const novoUsuario = await userModel.criarUsuario({nome_usuario, email, senha, tipo});
+
+        if (tipo === 'PACIENTE' && paciente) {
+            await Paciente.criarPaciente({
+                usuarioId: novoUsuario.id,
+                ...paciente
+            });
+        }
+
+        if (tipo === 'PROFISSIONAL' && profissional) {
+            await Profissional.criarProfissional({
+                usuarioId: novoUsuario.id,
+                ...profissional
+            });
+        }
+
+        res.status(201).json({
+            message: 'Usuário cadastrado com sucesso!',
+            id: novoUsuario.id
+        });
     }
     catch (error) {
-        res.status(500).json({error: "Erro ao registrar usuário!"});
+        rconsole.error("ERRO AO REGISTRAR:", error);
+        res.status(500).json({error: error.message || "Erro ao registrar usuário!"});
     }
 };
 
 const login = async (req, res) => {
     try {
         const {email, senha} = req.body;
+        console.log("Tentando login com email:", email);
+
 
         const usuario = await userModel.buscarUsuarioPorEmail(email);
+        console.log("Resultado da busca:", usuario);
         if (!usuario) {
             return res.status(400).send({error: 'Usuário não encontrado!'});
         }
@@ -45,7 +69,15 @@ const login = async (req, res) => {
             { expiresIn: '1h' }
         );
 
-        res.json({token});
+        res.json({
+            token,
+            usuario: {
+                id: usuario.id,
+                nome_usuario: usuario.nome_usuario,
+                email: usuario.email,
+                tipo: usuario.tipo
+            }
+        });
     }
     catch (error) {
         res.status(500).json({error: "Erro ao fazer login!"});
