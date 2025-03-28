@@ -28,6 +28,7 @@ const criarGrupoApoio = async (data) => {
             tipo_atendimento: data.tipo_atendimento,
             gratuito: data.gratuito,
             valor: data.valor,
+            image: data.image
         },
     });
 };
@@ -52,6 +53,7 @@ const atualizarGrupoApoio = async (id, data) => {
             tipo_atendimento: data.tipo_atendimento,
             gratuito: data.gratuito,
             valor: data.valor,
+            image: data.image
         },
     });
 };
