@@ -24,27 +24,39 @@ exports.buscarDepoimentoPorId = async (req, res) => {
     }
 };
 
+const prisma = require('../prisma'); // necessário para checar o bixo
+
 exports.criarDepoimento = async (req, res) => {
-    try {
-        const { pacienteId, texto } = req.body;
+  try {
+    const usuarioId = req.user.id; // ID do usuário autenticado, porque antes tava vindo do body e dando b.o na autencicação
+    const { texto } = req.body;
 
-        if (!pacienteId || !texto) {
-            return res.status(400).json({ error: "PacienteId e texto são obrigatórios" });
-        }
-
-        const novoDepoimento = await Depoimento.criarDepoimento({
-            pacienteId,
-            texto
-        });
-
-        res.status(201).json(novoDepoimento);
+    if (!texto) {
+      return res.status(400).json({ error: "Texto é obrigatório" });
     }
-    catch (error) {
-        console.error('ERRO AO CRIAR DEPOIMENTO:', error);
-        res.status(500).json({ error: error.message || "Erro ao criar depoimento" });
+
+    //verifica se é um paciente registrado
+    const paciente = await prisma.paciente.findUnique({
+      where: { usuarioId }
+    });
+
+    if (!paciente) {
+      return res.status(403).json({ error: "Apenas pacientes podem enviar depoimentos" });
     }
+
+    const novoDepoimento = await prisma.depoimento.create({
+      data: {
+        pacienteId: paciente.id,
+        texto
+      }
+    });
+
+    res.status(201).json(novoDepoimento);
+  } catch (error) {
+    console.error('ERRO AO CRIAR DEPOIMENTO:', error);
+    res.status(500).json({ error: error.message || "Erro ao criar depoimento" });
+  }
 };
-
 exports.atualizarDepoimento = async (req, res) => {
     try {
         const { id } = req.params;
