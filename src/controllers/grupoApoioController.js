@@ -26,10 +26,10 @@ exports.buscarGrupoApoioPorId = async (req, res) => {
 
 exports.criarGrupoApoio = async (req, res) => {
     try {
-        const { nome, descricao, local, horario, publico_alvo, tipo_atendimento, gratuito, valor } = req.body;
+        const { nome, descricao, local, horario, publico_alvo, tipo_atendimento, gratuito, valor, image } = req.body;
 
         if (!nome || !descricao || !local || !horario || !publico_alvo 
-            || !tipo_atendimento || !gratuito || !valor) {
+            || !tipo_atendimento || !valor) {
             return res.status(400).json({ error: "Nome, descrição, local e horário são obrigatórios" });
         }
 
@@ -41,7 +41,8 @@ exports.criarGrupoApoio = async (req, res) => {
             publico_alvo,
             tipo_atendimento,
             gratuito,
-            valor
+            valor,
+            image
         });
 
         res.status(201).json(novoGrupo);
@@ -55,7 +56,7 @@ exports.criarGrupoApoio = async (req, res) => {
 exports.atualizarGrupoApoio = async (req, res) => {
     try {
         const { id } = req.params;
-        const { nome, descricao, local, horario, publico_alvo, tipo_atendimento, gratuito, valor } = req.body;
+        const { nome, descricao, local, horario, publico_alvo, tipo_atendimento, gratuito, valor, image } = req.body;
 
         const grupoAtualizado = await GrupoApoio.atualizarGrupoApoio(Number(id), {
             nome,
@@ -65,7 +66,8 @@ exports.atualizarGrupoApoio = async (req, res) => {
             publico_alvo,
             tipo_atendimento,
             gratuito,
-            valor
+            valor,
+            image
         });
 
         res.status(201).json(grupoAtualizado);

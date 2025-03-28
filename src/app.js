@@ -9,10 +9,12 @@ const depoimentoRoutes = require('./routes/depoimentosRoutes');
 const grupoApoioRoutes = require('./routes/grupoApoioRoutes');
 
 const app = express();
+    
+app.use(cors({
+    origin: 'http://localhost:5173', // Permite requisições do frontend
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+}));
 
-// Habilita CORS para permitir requisições do front-end
-app.use(cors());
-// Permite JSON no body das requisições
 app.use(express.json());
 
 app.use('/auth', authRoutes);

@@ -34,6 +34,7 @@ model Grupo_apoio {
   tipo_atendimento String
   gratuito Boolean
   valor String
+  image String?
 }
 
 model Depoimento {
