@@ -36,7 +36,7 @@ exports.criarPaciente = async (req, res) => {
       objetivo_terapia
     } = req.body;
 
-    // ✅ Validação de campos obrigatórios
+  
     if (
       !usuarioId || !nome_paciente || !data_nascimento || !genero ||
       !endereco || !queixas || !historico_familiar || !uso_medicamentos || !objetivo_terapia
@@ -44,7 +44,7 @@ exports.criarPaciente = async (req, res) => {
       return res.status(400).json({ error: "Todos os campos são obrigatórios" });
     }
 
-    // ✅ Validação de data
+    
     if (isNaN(Date.parse(data_nascimento))) {
       return res.status(400).json({ error: "Data de nascimento inválida" });
     }

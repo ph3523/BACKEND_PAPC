@@ -48,41 +48,44 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
     try {
-        const {email, senha} = req.body;
-        console.log("Tentando login com email:", email);
 
+        const { email, senha } = req.body;
+
+        console.log("Tentando login com email:", email);
 
         const usuario = await userModel.buscarUsuarioPorEmail(email);
         console.log("Resultado da busca:", usuario);
+
         if (!usuario) {
-            return res.status(400).send({error: 'Usuário não encontrado!'});
+            return res.status(400).send({ error: "Usuário não encontrado!" });
         }
 
+        // Verifica a senha
         const senhaValida = await bcrypt.compare(senha, usuario.senha);
+        console.log("Senha válida?", senhaValida);
+
         if (!senhaValida) {
-            return res.status(401).send({error: 'Senha inválida!'});
+            return res.status(401).send({ error: "Senha inválida!" });
         }
 
         const token = jwt.sign(
             { id: usuario.id, tipo: usuario.tipo },
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: "1h" }
         );
 
         res.json({
             token,
-            usuario: {
-                id: usuario.id,
-                nome_usuario: usuario.nome_usuario,
-                email: usuario.email,
-                tipo: usuario.tipo
-            }
+            id: usuario.id,
+            tipo: usuario.tipo,
+            nome_usuario: usuario.nome_usuario
         });
+    } catch (error) {
+        console.error("Erro no login:", error);
+        res.status(500).json({ error: "Erro ao fazer login!" });
+
     }
-    catch (error) {
-        res.status(500).json({error: "Erro ao fazer login!"});
-    }
-};
+  };
 
 module.exports = {
     register, 
